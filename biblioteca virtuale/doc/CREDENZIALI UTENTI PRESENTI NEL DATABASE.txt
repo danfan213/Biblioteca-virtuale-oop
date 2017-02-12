@@ -1,0 +1,20 @@
+--ADMIN:
+	username=max
+	password=max
+
+
+
+--EXPERT USER:
+	username=dani
+	password=dani
+
+
+
+--EDITOR PAGE:
+	username=giulia
+	password=giulia
+
+
+--EDITOR TEXT
+	username=tellina
+	password=tellina
