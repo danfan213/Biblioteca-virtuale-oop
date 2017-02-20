@@ -36,7 +36,7 @@ public class HomeEditorText {
 	private JButton logout = new JButton("LOGOUT");
 	private EditorTextView view = new EditorTextView();
 
-	public JFrame getHome(final User_model user) throws IOException {
+	public void getHome(final User_model user) throws IOException {
 		JPanel test = new JPanel(new BorderLayout());
 
 		final CardLayout layout = new CardLayout();
@@ -95,6 +95,5 @@ public class HomeEditorText {
 			}
 		});
 
-		return this.window;
 	}
 }

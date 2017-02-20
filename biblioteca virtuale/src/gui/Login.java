@@ -30,7 +30,7 @@ public class Login {
 	private boolean logbut = false;
 	LoginView logview = new LoginView();
 
-	public JFrame Initialize() {
+	public void Initialize() {
 		this.logJFrame = new JFrame("LOGIN");
 		this.basicUser = new JButton("login come ospite");
 		this.register = new JButton("registrati");
@@ -81,9 +81,10 @@ public class Login {
 				List<User_model> list = new ArrayList<>();
 				list = logview.loginCheck(username, password);
 				if (list.isEmpty()) {
-
+					System.out.println("addio");
 					logbut = false;
 				} else {
+					System.out.println("bo");
 
 					User_model u = list.get(0);
 
@@ -118,7 +119,6 @@ public class Login {
 
 			}
 		});
-		return this.logJFrame;
 	}
 
 }

@@ -1,4 +1,4 @@
-package datalayer;
+package datalayer.dbms;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,9 +17,14 @@ import model.User_model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import utility.GetImage;
+
 import com.mysql.jdbc.Blob;
 
 public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
+	private GetImage getImage=new GetImage();
+
+	
 	@Override
 	public PageBook_model setModel_selectField(String element,
 			PageBook_model temp, ResultSet rs) {
@@ -32,7 +37,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 				temp.setNum_pag(rs.getInt("num_pag"));
 				break;
 			case "image":
-				temp.setImage((Blob) rs.getBlob("image"));
+				temp.setImage(getImage.getImageIcon((Blob) rs.getBlob("image")));
 				break;
 			case "book_id":
 				List<Book_model> listBooks = new ArrayList<Book_model>();
@@ -72,7 +77,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 		PreparedStatement statement;
 		try {
 			statement = connection
-					.prepareStatement("SELECT * FROM pagebook WHERE " + stm);
+					.prepareStatement( stm);
 
 			rs = statement.executeQuery();
 			if (rs != null) {
@@ -82,7 +87,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					if (call == false) {
 						List<Book_model> listBooks = new ArrayList<Book_model>();
 
-						String exstm = "id_book=" + rs.getInt("book_id");
+						String exstm = "SELECT * FROM book WHERE id_book=" + rs.getInt("book_id");
 						listBooks = booksql.selectAll(exstm, true);
 						for (Book_model element : listBooks) {
 							Book = new Book_model(null, 0, 0, null, null, null);
@@ -92,7 +97,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 						temp.setBook(Book);
 						List<User_model> listUsers = new ArrayList<User_model>();
 
-						 exstm = "id_user=" + rs.getInt("user_id");
+						 exstm = "SELECT * FROM user WHERE id_user=" + rs.getInt("user_id");
 						listUsers = usersql.selectAll(exstm, true);
 						for (User_model element : listUsers) {
 							user = new User_model(0, null, null, null, null);
@@ -108,7 +113,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					}
 					List<Transcript_model> listTranscripts = new ArrayList<Transcript_model>();
 
-					String exstm = "pagebook_id=" + rs.getInt("id_pagebook")+" AND is_confirmed='yes'";
+					String exstm = "SELECT * FROM transcript WHERE pagebook_id=" + rs.getInt("id_pagebook")+" AND is_confirmed='yes'";
 					listTranscripts = transcriptsql.selectAll(exstm, true);
 					for (Transcript_model element : listTranscripts) {
 						Transcript = new Transcript_model(0, null, null, null);
@@ -118,7 +123,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					}
 					temp.setTranscript(Transcript);
 					Transcript=new Transcript_model(0, null, null, null);
-					temp.setImage(rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon((Blob) rs.getBlob("image")));
 					temp.setId_pagebook(rs.getInt("id_pagebook"));
 					temp.setNum_pag(rs.getInt("num_pag"));
 					temp.setIs_confirmed(rs.getString("is_confirmed"));
@@ -146,8 +151,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("SELECT " + query
-					+ " FROM pagebook WHERE " + stm);
+			statement = connection.prepareStatement(stm);
 			rs = statement.executeQuery();
 			while (rs.next()) {
 				temp = new PageBook_model(0, 0, null, null, null, null);
@@ -169,14 +173,13 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 	}
 
 	// @Override
-	public Boolean update(String set, String stm) {
+	public Boolean update(String stm) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("update pagebook set" + set
-					+ "where " + stm);
+			statement = connection.prepareStatement( stm);
 			statement.executeUpdate();
 			con.disconnetti(connection, statement, rs);
 
@@ -196,7 +199,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 		try {
 
 			PreparedStatement statement = connection
-					.prepareStatement("delete from pagebook where " + stm);
+					.prepareStatement(stm);
 			statement.execute();
 
 			con.disconnetti(connection, statement, rs);
@@ -207,7 +210,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 		}
 	}
 
-	public Boolean insert(String set, String stm, File image) {
+	public Boolean insert(String stm, File image) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
@@ -219,8 +222,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 			return false;
 		}
 		try {
-			statement = connection.prepareStatement("insert into pagebook ("
-					+ set + ") values (?," + stm + ")");
+			statement = connection.prepareStatement(stm);
 			statement.setBinaryStream(1, fis, (int) image.length());
 			statement.execute();
 
@@ -255,7 +257,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					if (call == false) {
 						List<Book_model> listBooks = new ArrayList<Book_model>();
 
-						String exstm = "id_book=" + rs.getInt("book_id");
+						String exstm = "SELECT * FROM book WHERE id_book=" + rs.getInt("book_id");
 						listBooks = booksql.selectAll(exstm, true);
 						for (Book_model element : listBooks) {
 							Book = new Book_model(null, 0, 0, null, null, null);
@@ -264,7 +266,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 						}
 						temp.setBook(Book);
 					}
-					temp.setImage((Blob) rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon((Blob) rs.getBlob("image")));
 					temp.setId_pagebook(rs.getInt("id_pagebook"));
 					temp.setNum_pag(rs.getInt("num_pag"));
 
@@ -306,7 +308,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					if (call == false) {
 						List<Book_model> listBooks = new ArrayList<Book_model>();
 
-						String exstm = "id_book=" + rs.getInt("book_id");
+						String exstm = "SELECT * FROM book WHERE id_book=" + rs.getInt("book_id");
 						listBooks = booksql.selectAll(exstm, true);
 						for (Book_model element : listBooks) {
 							Book = new Book_model(null, 0, 0, null, null, null);
@@ -323,7 +325,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					}
 					List<Transcript_model> listTranscripts = new ArrayList<Transcript_model>();
 
-					String exstm = "pagebook_id=" + rs.getInt("id_pagebook");
+					String exstm = "SELECT * FROM transcript WHERE pagebook_id=" + rs.getInt("id_pagebook");
 					listTranscripts = transcriptsql.selectAll(exstm, true);
 					for (Transcript_model element : listTranscripts) {
 						Transcript = new Transcript_model(0, null, null, null);
@@ -332,7 +334,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 						Transcript = element;
 					}
 					temp.setTranscript(Transcript);
-					temp.setImage(rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon((Blob) rs.getBlob("image")));
 					temp.setId_pagebook(rs.getInt("id_pagebook"));
 					temp.setNum_pag(rs.getInt("num_pag"));
 
@@ -375,7 +377,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					if (call == false) {
 						List<Book_model> listBooks = new ArrayList<Book_model>();
 
-						String exstm = "id_book=" + rs.getInt("book_id");
+						String exstm = "SELECT * FROM book WHERE id_book=" + rs.getInt("book_id");
 						listBooks = booksql.selectAll(exstm, true);
 						for (Book_model element : listBooks) {
 							Book = new Book_model(null, 0, 0, null, null, null);
@@ -392,7 +394,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 					}
 					List<Transcript_model> listTranscripts = new ArrayList<Transcript_model>();
 
-					String exstm = "pagebook_id=" + rs.getInt("id_pagebook");
+					String exstm = "SELECT * FROM transcript WHERE pagebook_id=" + rs.getInt("id_pagebook");
 					listTranscripts = transcriptsql.selectAll(exstm, true);
 					for (Transcript_model element : listTranscripts) {
 						Transcript = new Transcript_model(0, null, null, null);
@@ -401,7 +403,7 @@ public class PageBookMysqlImpl implements Entity_manager<PageBook_model> {
 						Transcript = element;
 					}
 					temp.setTranscript(Transcript);
-					temp.setImage(rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon((Blob) rs.getBlob("image")));
 					temp.setId_pagebook(rs.getInt("id_pagebook"));
 					temp.setNum_pag(rs.getInt("num_pag"));
 

@@ -4,6 +4,8 @@ import java.sql.Blob;
 import java.sql.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 public class Book_model {
 	private int id_book;
 	private String name;
@@ -11,11 +13,11 @@ public class Book_model {
 	private int release_year;
 	private Author_model author;
 	private List<PageBook_model> pagebook;
-	private Blob image;
+	private ImageIcon image;
 	
 	
 	public Book_model(String name, int num_total_page,
-			int release_year, Author_model author,List<PageBook_model> pagebook,Blob image) {
+			int release_year, Author_model author,List<PageBook_model> pagebook,ImageIcon image) {
 		//super();
 //		this.id_book = id_book;
 		this.name = name;
@@ -94,12 +96,12 @@ public class Book_model {
 	}
 
 
-	public Blob getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
 
 
-	public void setImage(Blob image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 

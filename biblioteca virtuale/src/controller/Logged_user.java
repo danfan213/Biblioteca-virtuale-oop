@@ -8,11 +8,12 @@ import model.Book_model;
 import model.PageBook_model;
 import model.User_model;
 import view.LoginView;
-import datalayer.AuthorMysqlImpl;
-import datalayer.BookMysqlImpl;
-import datalayer.PageBookMysqlImpl;
-import datalayer.TranscriptMysqlImpl;
-import datalayer.UserMysqlImpl;
+import datalayer.dbms.AuthorMysqlImpl;
+import datalayer.dbms.BookMysqlImpl;
+import datalayer.dbms.ImplDbms;
+import datalayer.dbms.PageBookMysqlImpl;
+import datalayer.dbms.TranscriptMysqlImpl;
+import datalayer.dbms.UserMysqlImpl;
 
 public abstract class Logged_user {
 	
@@ -22,6 +23,7 @@ public abstract class Logged_user {
 	protected BookMysqlImpl modelBook;
 	protected AuthorMysqlImpl modelAuthor;
 	protected TranscriptMysqlImpl modelTranscript;
+	protected ImplDbms database=new ImplDbms(); 
 	
 	
 	public Logged_user(User_model user) {
@@ -49,9 +51,7 @@ public abstract class Logged_user {
 	
 	public List<Book_model> searchBook(String title) {			
 		List<Book_model>list=new ArrayList<>();
-		this.modelBook=new BookMysqlImpl();
-		String stm="name LIKE '%"+title+"%'";
-		list=this.modelBook.selectAll(stm, false);
+		list=this.database.searchBook(title);
 		return list;
 		
 	}	

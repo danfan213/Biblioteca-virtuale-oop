@@ -10,10 +10,10 @@ import model.Book_model;
 import model.PageBook_model;
 import model.User_model;
 import view.AdminView;
-import datalayer.AuthorMysqlImpl;
-import datalayer.BookMysqlImpl;
-import datalayer.PageBookMysqlImpl;
-import datalayer.UserMysqlImpl;
+import datalayer.dbms.AuthorMysqlImpl;
+import datalayer.dbms.BookMysqlImpl;
+import datalayer.dbms.PageBookMysqlImpl;
+import datalayer.dbms.UserMysqlImpl;
 
 public class Admin_user extends Logged_user {
 
@@ -25,19 +25,14 @@ public class Admin_user extends Logged_user {
 	// override del metodo astratto ritorna le pagine non confermate
 	public List<PageBook_model> listPages() {
 		List<PageBook_model> list = new ArrayList<>();
-		this.modelPageBook = new PageBookMysqlImpl();
-		String stm = "is_confirmed='not' ORDER BY date_ins DESC LIMIT 5 ";
-		list = this.modelPageBook.selectAll(stm, false);
+		list=this.database.listPageBookStateNot();
 		return list;
 	}
 
 	// torna tutti la lista di tutti i libri
 	public List<Book_model> searchBook() {
 		List<Book_model> list = new ArrayList<>();
-		this.modelBook = new BookMysqlImpl();
-		String stm = "1";
-
-		list = this.modelBook.selectAll(stm, false);
+		list = this.database.searchBook();
 		return list;
 
 	}
@@ -60,20 +55,14 @@ public class Admin_user extends Logged_user {
 		List<User_model> listUsers = new ArrayList<>();
 		fields.add("username");
 		fields.add("group_id");
-		listUsers = this.modelUser
-				.selectField(fields,
-						"group_id!=(SELECT id_group from `group` where name='admin_user')");
+		listUsers = this.database.UsersGroups(fields);
 		return listUsers;
 	}
 
 	// cambia il ruolo di un utente
 	public boolean updateGroup(String username, String group) {
 		Boolean resp;
-		this.modelUser = new UserMysqlImpl();
-		int id = this.modelUser.getGroupId(group);
-		String set = "group_id=" + id;
-		String stm = "username='" + username + "'";
-		resp = this.modelUser.update(set, stm);
+		resp=this.database.updateGroup(username, group);
 		return resp;
 	}
 
@@ -83,39 +72,27 @@ public class Admin_user extends Logged_user {
 		this.modelUser = new UserMysqlImpl();
 		List<String> fields = new ArrayList<>();
 		fields.add("username");
-		list = this.modelUser.selectField(fields, "id_user!="
-				+ this.getUser().getId_User_model() + " ORDER BY username ASC");
+		list = this.database.UsersListmodel(getUser().getId_User_model(), fields);
 
 		return list;
 	}
 
 	public boolean deleteUser(String username) {
 		boolean ris = false;
-		this.modelUser = new UserMysqlImpl();
-		String stm = "username='" + username + "'";
-		ris = this.modelUser.delete(stm);
-
+		ris = this.database.deleteUser(username);
 		return ris;
 	}
 
 	public boolean deleteBook(String name) {
 		boolean ris = false;
-		this.modelBook = new BookMysqlImpl();
-		String stm = "name='" + name + "'";
-		ris = this.modelBook.delete(stm);
-
+		ris = this.database.deleteBook(name);
 		return ris;
 	}
 
 	public boolean insertBook(String name, int autore, File image, int anno,
 			int numPag) {
 		boolean ris;
-
-		String set = "image,name,author_id,num_total_page,release_year";
-		String stm = "'" + name + "'," + autore + "," + numPag + "," + anno;
-		this.modelBook = new BookMysqlImpl();
-		ris = this.modelBook.insert(set, stm, image);
-
+		ris = this.database.insertBook(name, autore, image, anno, numPag);
 		return ris;
 	}
 
@@ -125,31 +102,20 @@ public class Admin_user extends Logged_user {
 		List<String> fields = new ArrayList<>();
 		fields.add("id_author");
 		fields.add("name");
-		this.modelAuthor = new AuthorMysqlImpl();
-		list = this.modelAuthor.selectField(fields, "1");
+		list = this.database.listAuthor(fields);
 		return list;
 	}
 
 	public boolean updateBook(String name, int autore, File image, int anno,
 			int numPag, int id) {
 		boolean ris;
-		String set = "name='" + name + "',author_id=" + autore
-				+ ",release_year=" + anno + ",num_total_page=" + numPag;
-		String stm = "id_book=" + id;
-		this.modelBook = new BookMysqlImpl();
-		ris = this.modelBook.update(set, stm, image);
-
+		ris = this.database.updateBook(name, autore, image, anno, numPag, id);
 		return ris;
 	}
 
 	public boolean insertAuthor(String name, File image) {
 		boolean ris;
-
-		String set = "image,name";
-		String stm = "'" + name + "'";
-		this.modelAuthor = new AuthorMysqlImpl();
-		ris = this.modelAuthor.insert(set, stm, image);
-
+		ris = this.database.insertAuthor(name, image);
 		return ris;
 
 	}
@@ -157,9 +123,7 @@ public class Admin_user extends Logged_user {
 	// ritorna la lista di tutti i libri di un autore
 	public List<Author_model> getAuthorBooks(int idAuthor) {
 		List<Author_model> list = new ArrayList<>();
-
-		this.modelAuthor = new AuthorMysqlImpl();
-		list = this.modelAuthor.selectAll("id_author=" + idAuthor, false);
+		list = this.database.getAuthorBooks(idAuthor);
 		return list;
 	}
 

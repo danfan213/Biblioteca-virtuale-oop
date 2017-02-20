@@ -1,18 +1,20 @@
 package model;
 
+import javax.swing.ImageIcon;
+
 import com.mysql.jdbc.Blob;
 
 public class PageBook_model {
 	private int id_pagebook;
 	private int num_pag;
 	private Book_model book;
-	private java.sql.Blob image;
+	private ImageIcon image;
 	private Transcript_model transcript;
 	private User_model user;
 	private String is_confirmed;
 	
 	public PageBook_model(int id_pagebook, int num_pag, Book_model book,
-			Blob image,Transcript_model transcript,User_model user) {
+			ImageIcon image,Transcript_model transcript,User_model user) {
 		this.id_pagebook = id_pagebook;
 		this.num_pag = num_pag;
 		this.book = book;
@@ -45,11 +47,11 @@ public class PageBook_model {
 		this.book = book;
 	}
 
-	public java.sql.Blob getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
 
-	public void setImage(java.sql.Blob blob) {
+	public void setImage(ImageIcon blob) {
 		this.image = blob;
 	}
 

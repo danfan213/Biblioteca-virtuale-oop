@@ -18,6 +18,7 @@ import model.Book_model;
 import model.PageBook_model;
 import model.Transcript_model;
 import model.User_model;
+import utility.GetImage;
 import utility.ReadXMLFile;
 import view.AdminView;
 import view.EditorPageView;
@@ -33,7 +34,8 @@ public class SinglePage {
 	JScrollPane textPan=new JScrollPane();
 	private EditorPageView editorPage;
 	private EditorTextView editorText;
-	
+	private GetImage getImage=new GetImage();
+
 	
 	
 	public JPanel EditorTextPanel(final PageBook_model n, final EditorTextView editorText,
@@ -172,22 +174,22 @@ public <T> JPanel GetPage( PageBook_model page, T viewParam, List<PageBook_model
 		try {
 			if(user instanceof AdminView){
 				this.admin=new AdminView();
-				imagePanel = new ImageZoom(this.admin.getImageSingle(page.getImage()));
+				imagePanel = new ImageZoom(getImage.getImageSingle(page.getImage()));
 				image.add(imagePanel.initialize(),BorderLayout.WEST);
 			}
 			else if(user instanceof ExpertView){
 				this.expert=new ExpertView();
-				imagePanel = new ImageZoom(this.expert.getImageSingle(page.getImage()));
+				imagePanel = new ImageZoom(getImage.getImageSingle(page.getImage()));
 				image.add(imagePanel.initialize(),BorderLayout.WEST);	
 			}
 			else if(user instanceof EditorPageView){
 				this.editorPage=new EditorPageView();
-				imagePanel = new ImageZoom(this.editorPage.getImageSingle(page.getImage()));
+				imagePanel = new ImageZoom(getImage.getImageSingle(page.getImage()));
 				image.add(imagePanel.initialize(),BorderLayout.WEST);	
 			}
 			else if(user instanceof EditorTextView){
 				this.editorText=new EditorTextView();
-				imagePanel = new ImageZoom(this.editorText.getImageSingle(page.getImage()));
+				imagePanel = new ImageZoom(getImage.getImageSingle(page.getImage()));
 				image.add(imagePanel.initialize(),BorderLayout.WEST);	
 			}
 

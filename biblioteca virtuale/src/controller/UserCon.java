@@ -7,11 +7,12 @@ import java.util.List;
 import model.User_model;
 import view.LoginView;
 import view.RegistrationView;
-import datalayer.UserMysqlImpl;
+import datalayer.dbms.ImplDbms;
+import datalayer.dbms.UserMysqlImpl;
 
 public class UserCon {
 	private User_model user;
-
+	private ImplDbms database=new ImplDbms();
 	public UserCon(User_model user) {
 		super();
 		this.user = user;
@@ -66,36 +67,20 @@ public class UserCon {
 
 	// registrazione di un utente come expert_user
 	public boolean checkReg(String username, String password, String email) {
-		UserMysqlImpl newUser = new UserMysqlImpl();
-		List<User_model> listModel = new ArrayList<>();
 		List<String> list = new ArrayList<>();
 		list.add("id_user");
-		String stm = "username='" + username + "'";
+		boolean test=this.database.checkReg(username, password, email, list);
 
-		listModel = newUser.selectField(list, stm);
-
-		if (!listModel.isEmpty()) {
-
-			return false;
-		}
-		boolean test = newUser.insert("username,password,email,group_id", "'"
-				+ username + "','" + password + "','" + email + "',2");
 		return test;
 	}
 
 	// controllo se esiste utente per login
 	public List<User_model> checkLog(String username, char[] passwordpar) {
-		UserMysqlImpl newUser = new UserMysqlImpl();
 		List<User_model> listModel = new ArrayList<>();
-		String password=String.valueOf(passwordpar);
-		String stm = "username='" + username + "' and password='" + password
-				+ "'";
-		listModel = newUser.selectAll(stm, true);
-		if (listModel.isEmpty()) {
-
-			return listModel = new ArrayList<>();
-		} else
-			return listModel;
+		
+		listModel =this.database.checkLog(username, passwordpar) ;
+		System.out.println("ciao");
+		return listModel;
 	}
 
 }

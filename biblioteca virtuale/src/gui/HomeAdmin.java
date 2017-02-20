@@ -50,7 +50,7 @@ public class HomeAdmin {
 	private AdminView view=new AdminView();
 	
 	
-	public JFrame getHome(final User_model user) throws IOException {
+	public void getHome(final User_model user) throws IOException {
 		//this.permessi = this.list.getList();
 		//this.userList = this.Ulist.getUserList(user);
 		
@@ -188,7 +188,6 @@ listaLibri.addActionListener(new ActionListener() {
 			}
 		});
 		
-		return this.window;
 	}
 }	
 

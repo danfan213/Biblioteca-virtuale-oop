@@ -23,6 +23,7 @@ import javax.swing.event.CellEditorListener;
 import model.Book_model;
 import model.PageBook_model;
 import model.User_model;
+import utility.GetImage;
 import view.AdminView;
 import view.BasicView;
 import view.EditorPageView;
@@ -39,6 +40,7 @@ public class ListSearch {
 	private JPanel list = new JPanel(new FlowLayout());
 	private EditorTextView editorText;
 	private BasicView basic;
+	private GetImage getImage=new GetImage();
 
 	// ////////////////////////////////ULTIME PAGINE RIFIUTATE DAGLI
 	// EDITORS/////////////7777
@@ -296,22 +298,18 @@ public class ListSearch {
 		}
 		if (viewParam instanceof AdminView) {
 			this.admin = new AdminView();
-			img = this.admin.getImage(n.getImage());
 
 		} else if (viewParam instanceof ExpertView) {
 			this.expert = new ExpertView();
-			img = this.expert.getImage(n.getImage());
 
 		} else if (viewParam instanceof EditorPageView) {
 			this.editorPage = new EditorPageView();
-			img = this.editorPage.getImage(n.getImage());
 
 		} else if (viewParam instanceof EditorTextView) {
 			this.editorText = new EditorTextView();
-			img = this.editorText.getImage(n.getImage());
 
 		}
-
+		img = getImage.getImageList(n.getImage());
 		label.setIcon(img);
 		descr.add(book);
 
@@ -383,7 +381,7 @@ public class ListSearch {
 			for (PageBook_model element : listPages) {
 				JLabel JLabel;
 				JPanel gridElement = new JPanel(new GridLayout(2, 1, 0, -70));
-				ImageIcon img = this.basic.getImage(element.getImage());
+				ImageIcon img = getImage.getImageList(element.getImage());
 				gridElement.add(new JLabel(img));
 				gridElement.add(JLabel = new JLabel(element.getBook().getName()
 						+ " (" + element.getNum_pag() + ")"));
@@ -393,7 +391,7 @@ public class ListSearch {
 			for (PageBook_model element : listTranscripts) {
 				JLabel JLabel;
 				JPanel gridElement = new JPanel(new GridLayout(2, 1, 0, -70));
-				ImageIcon img = this.basic.getImage(element.getImage());
+				ImageIcon img = getImage.getImageList(element.getImage());
 				gridElement.add(new JLabel(img));
 				gridElement.add(JLabel = new JLabel(element.getBook().getName()
 						+ " (" + element.getNum_pag() + ")"));

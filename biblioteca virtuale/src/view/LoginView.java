@@ -5,22 +5,19 @@ import gui.Login;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import model.User_model;
 import controller.UserCon;
 
 public class LoginView {
 
-	private JFrame logJFrame;
 	UserCon controllerUser = new UserCon();
 	private List<User_model> listModel = new ArrayList<>();
-
+	
 	
 
 	public void Initialize() {
-		Login frame = new Login();
-		this.logJFrame = frame.Initialize();
+		Login login=new Login();
+		login.Initialize();
 	}
 
 	public void registrazione() {

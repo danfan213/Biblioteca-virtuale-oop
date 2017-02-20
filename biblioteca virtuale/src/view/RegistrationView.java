@@ -12,7 +12,7 @@ public class RegistrationView {
 
 	public void InitializeView() {
 		Registration window = new Registration();
-		this.regPanel = window.initialize();
+window.initialize();
 	}
 
 	public boolean registrazione(String username, String password, String email) {

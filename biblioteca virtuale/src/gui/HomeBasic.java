@@ -36,7 +36,7 @@ public class HomeBasic {
 	private JButton logout = new JButton("LOGOUT");
 	private BasicView view = new BasicView();
 
-	public JFrame getHome() throws IOException {
+	public void getHome() throws IOException {
 		// this.permessi = this.list.getList();
 		// this.userList = this.Ulist.getUserList(user);
 
@@ -100,7 +100,6 @@ public class HomeBasic {
 			}
 		});
 
-		return this.window;
 	}
 
 }

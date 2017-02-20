@@ -1,4 +1,4 @@
-package datalayer;
+package datalayer.dbms;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,11 @@ import model.Book_model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import utility.GetImage;
+
 public class AuthorMysqlImpl implements Entity_manager<Author_model> {
+	private GetImage getImage=new GetImage();
+	
 	@Override
 	public Author_model setModel_selectField(String element, Author_model temp,
 			ResultSet rs) {
@@ -28,7 +32,7 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 				temp.setName(rs.getString("name"));
 				break;
 			case "image":
-				temp.setImage(rs.getBlob("image"));
+				temp.setImage(getImage.getImageIcon(rs.getBlob("image")));
 				break;
 			}
 		} catch (SQLException e) {
@@ -49,18 +53,18 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 		PreparedStatement statement;
 		try {
 			statement = connection
-					.prepareStatement("SELECT * FROM author WHERE " + stm);
+					.prepareStatement(stm);
 			rs = statement.executeQuery();
 			if (rs != null) {
 				while (rs.next()) {
 					temp = new Author_model(0, null, null);
 					if (call == false) {
 						List<Book_model> listBooks = new ArrayList<Book_model>();
-						String exstm = "author_id=" + rs.getInt("id_author");
+						String exstm = "SELECT * FROM book WHERE author_id=" + rs.getInt("id_author");
 						listBooks = booksql.selectAll(exstm, true);
 						temp.setList_book(listBooks);
 					}
-					temp.setImage(rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon(rs.getBlob("image")));
 					temp.setId_author(rs.getInt("id_author"));
 					temp.setName(rs.getString("name"));
 					listAuthors.add(temp);
@@ -84,8 +88,7 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 		Connection connection = con.connessione();
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("SELECT " + query
-					+ " FROM author WHERE " + stm);
+			statement = connection.prepareStatement(stm);
 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
@@ -106,13 +109,12 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 	}
 
 	// @Override
-	public Boolean update(String set, String stm) {
+	public Boolean update( String stm) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("update author set" + set
-					+ "where " + stm);
+			statement = connection.prepareStatement(stm);
 			statement.executeQuery();
 			return true;
 		} catch (SQLException e) {
@@ -128,8 +130,7 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 		Connection connection = con.connessione();
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("delete from author where "
-					+ stm);
+			statement = connection.prepareStatement(stm);
 
 			statement.execute();
 
@@ -141,7 +142,7 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 		}
 	}
 
-	public Boolean insert(String set, String stm, File image) {
+	public Boolean insert( String stm, File image) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
@@ -151,8 +152,7 @@ public class AuthorMysqlImpl implements Entity_manager<Author_model> {
 		try {
 			fis = new FileInputStream(image);
 
-			statement = connection.prepareStatement("insert into author ("
-					+ set + ") values (?," + stm + ")");
+			statement = connection.prepareStatement(stm);
 			statement.setBinaryStream(1, fis, (int) image.length());
 			statement.execute();
 

@@ -7,8 +7,8 @@ import java.util.List;
 import model.Book_model;
 import model.PageBook_model;
 import view.BasicView;
-import datalayer.BookMysqlImpl;
-import datalayer.PageBookMysqlImpl;
+import datalayer.dbms.BookMysqlImpl;
+import datalayer.dbms.PageBookMysqlImpl;
 
 public class Basic_user extends Logged_user {
 
@@ -21,9 +21,7 @@ public class Basic_user extends Logged_user {
 		fields.add("num_pag");
 		fields.add("image");
 		fields.add("book_id");
-		this.modelPageBook = new PageBookMysqlImpl();
-		list = this.modelPageBook.selectField(fields,
-				" is_confirmed='yes' ORDER BY date_ins DESC LIMIT 5");
+		list = this.database.listLastPagesStateYes(fields);
 		return list;
 	}
 
@@ -40,12 +38,10 @@ public class Basic_user extends Logged_user {
 	public List<Book_model> searchBook(String title) {
 		List<Book_model> list = new ArrayList<>();
 		List<String> fields = new ArrayList<>();
-		this.modelBook = new BookMysqlImpl();
 		fields.add("name");
 		fields.add("image");
 		fields.add("num_total_page");
-		String stm = "name LIKE '%" + title + "%'";
-		list = this.modelBook.selectField(fields, stm);
+		list = this.database.searchBasicBook(title, fields);
 		return list;
 
 	}
@@ -53,9 +49,7 @@ public class Basic_user extends Logged_user {
 	// ritorna le ultime 5 pagine con la trascrizione accettata
 	public List<PageBook_model> listTranscripts() {
 		List<PageBook_model> list = new ArrayList<>();
-
-		this.modelPageBook = new PageBookMysqlImpl();
-		list = this.modelPageBook.selectTran(false, "yes");
+		list = this.database.listLastTranscripts();
 		return list;
 	}
 

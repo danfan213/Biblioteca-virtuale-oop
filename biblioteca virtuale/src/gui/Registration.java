@@ -26,7 +26,7 @@ public class Registration {
 	private JPasswordField txtconfpass;
 	private RegistrationView regView = new RegistrationView();
 
-	public JFrame initialize() {
+	public void initialize() {
 		this.regJFrame = new JFrame("REGISTRAZIONE");
 		JButton register = new JButton("registrati");
 		JPanel loginPanel = new JPanel(new BorderLayout());
@@ -97,7 +97,6 @@ public class Registration {
 				}
 			}
 		});
-		return this.regJFrame;
 	}
 
 }

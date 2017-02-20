@@ -23,7 +23,6 @@ public class EditorTextView {
 	private User_model user;
 	private EditorText_user controllerEditorText;
 
-	private JFrame home;
 
 	public EditorTextView(User_model user) {
 		super();
@@ -36,58 +35,59 @@ public class EditorTextView {
 
 	public void InitializeView() {
 		HomeEditorText window = new HomeEditorText();
+
 		try {
-			this.home = window.getHome(this.user);
+			window.getHome(this.user);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public ImageIcon getImage(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(200, 300, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
-
-	public ImageIcon getImageAuthor(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(150, 200, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
-
-	public ImageIcon getImageSingle(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(350, 500, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
+//	public ImageIcon getImage(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(200, 300, Image.SCALE_DEFAULT));
+//
+//		return icon;
+//	}
+//
+//	public ImageIcon getImageAuthor(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+//
+//		return icon;
+//	}
+//
+//	public ImageIcon getImageSingle(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(350, 500, Image.SCALE_DEFAULT));
+//
+//		return icon;
+//	}
 
 	public void logout(JFrame frame) {
 		frame.dispose();

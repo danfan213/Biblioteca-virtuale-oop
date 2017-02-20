@@ -3,14 +3,16 @@ package model;
 import java.sql.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 public class Author_model {
 	private int id_author;
 	private String name;
-	private java.sql.Blob image;
+	private ImageIcon image;
 	private List<Book_model> list_book;
 
 	public Author_model(int id_Author_model, String name,
-			java.sql.Blob image) {
+			ImageIcon image) {
 		// this.id_Author_model = id_Author_model;
 		this.name = name;
 		this.image= image;
@@ -36,11 +38,11 @@ public class Author_model {
 
 	
 
-	public java.sql.Blob getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
 
-	public void setImage(java.sql.Blob image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 

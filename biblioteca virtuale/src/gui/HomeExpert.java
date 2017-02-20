@@ -41,7 +41,7 @@ public class HomeExpert {
 	private JButton listaLibri = new JButton("LISTA LIBRI");
 	private ExpertView view = new ExpertView();
 
-	public JFrame getHome(final User_model user) throws IOException {
+	public void getHome(final User_model user) throws IOException {
 		JPanel first = new JPanel();
 		final CardLayout layout = new CardLayout();
 		this.content.setLayout(layout);
@@ -135,6 +135,5 @@ public class HomeExpert {
 			}
 		});
 
-		return this.window;
 	}
 }

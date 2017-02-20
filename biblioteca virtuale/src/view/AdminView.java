@@ -23,7 +23,6 @@ import controller.Admin_user;
 
 public class AdminView {
 	User_model user;
-	JFrame home;
 	Admin_user controllerAdmin;
 
 	public AdminView(User_model user) {
@@ -37,7 +36,7 @@ public class AdminView {
 
 	public void InitializeView() throws IOException {
 		HomeAdmin window = new HomeAdmin();
-		this.home = window.getHome(user);
+		window.getHome(user);
 
 	}
 
@@ -101,50 +100,50 @@ public class AdminView {
 		return list;
 	}
 
-	public ImageIcon getImage(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(200, 280, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
-
-	public ImageIcon getImageAuthor(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(150, 200, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
-	
-	public ImageIcon getImageSingle(java.sql.Blob blob) {
-		byte[] image = null;
-		try {
-			image = blob.getBytes(1, (int) blob.length());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		Image img = Toolkit.getDefaultToolkit().createImage(image);
-		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
-				.getScaledInstance(350, 500, Image.SCALE_DEFAULT));
-
-		return icon;
-	}
+//	public ImageIcon getImage(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(200, 280, Image.SCALE_DEFAULT));
+//
+//		return icon;
+//	}
+//
+//	public ImageIcon getImageAuthor(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+//		icon=new ImageIcon(new ImageIcon(image).getImage().getScaledInstance(150, 200, Image.SCALE_DEFAULT));
+//		return icon;
+//	}
+//	
+//	public ImageIcon getImageSingle(java.sql.Blob blob) {
+//		byte[] image = null;
+//		try {
+//			image = blob.getBytes(1, (int) blob.length());
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		Image img = Toolkit.getDefaultToolkit().createImage(image);
+//		ImageIcon icon = new ImageIcon(new ImageIcon(img).getImage()
+//				.getScaledInstance(350, 500, Image.SCALE_DEFAULT));
+//
+//		return icon;
+//	}
 	
 	
 

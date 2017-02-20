@@ -1,4 +1,4 @@
-package datalayer;
+package datalayer.dbms;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,7 +64,7 @@ public class UserMysqlImpl implements Entity_manager<User_model> {
 
 		try {
 			statement = this.connection
-					.prepareStatement("SELECT * FROM user WHERE " + stm);
+					.prepareStatement(stm);
 
 			rs = statement.executeQuery();
 			if (rs != null) {
@@ -110,8 +110,7 @@ public class UserMysqlImpl implements Entity_manager<User_model> {
 		this.connection = con.connessione();
 		PreparedStatement statement;
 		try {
-			statement = this.connection.prepareStatement("SELECT " + query
-					+ " FROM user WHERE " + stm);
+			statement = this.connection.prepareStatement(stm);
 
 			ResultSet rs = statement.executeQuery();
 
@@ -133,14 +132,13 @@ public class UserMysqlImpl implements Entity_manager<User_model> {
 		return listUsers;
 	}
 
-	public Boolean update(String set, String stm) {
+	public Boolean update(String stm) {
 		Connect con = new Connect();
 		this.connection = con.connessione();
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = this.connection.prepareStatement("update user set "
-					+ set + " where " + stm);
+			statement = this.connection.prepareStatement(stm);
 
 			statement.executeUpdate();
 			con.disconnetti(this.connection, statement, rs);
@@ -187,7 +185,7 @@ public class UserMysqlImpl implements Entity_manager<User_model> {
 		PreparedStatement statement;
 		try {
 			statement = this.connection
-					.prepareStatement("delete from user where " + stm);
+					.prepareStatement(stm);
 
 			statement.execute();
 
@@ -199,14 +197,13 @@ public class UserMysqlImpl implements Entity_manager<User_model> {
 		}
 	}
 
-	public Boolean insert(String set, String stm) {
+	public Boolean insert( String stm) {
 		Connect con = new Connect();
 		this.connection = con.connessione();
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = this.connection.prepareStatement("insert into user ("
-					+ set + ") values (" + stm + ")");
+			statement = this.connection.prepareStatement(stm);
 			statement.executeUpdate();
 
 			con.disconnetti(this.connection, statement, rs);

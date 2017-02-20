@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import model.Author_model;
 import model.Book_model;
 import model.User_model;
+import utility.GetImage;
 import view.AdminView;
 import view.BasicView;
 import view.EditorPageView;
@@ -35,6 +36,7 @@ public class ListBooks {
 	private EditorPageView editorPage;
 	private EditorTextView editorText;
 	private BasicView basic_user;
+	private GetImage getImage=new GetImage();
 
 	// /LISTA LIBRI RICERCA
 	public JPanel getBooks(String title, User_model userModel, JPanel content) {
@@ -119,32 +121,28 @@ public class ListBooks {
 
 		case "expert_user":
 			this.expert = new ExpertView();
-			image=expert.getImageAuthor(author.getImage());
 			this.listBooks = expert.getAuthorBookList(idAuthor);
 			
 			break;
 		case "admin_user":
 			this.admin = new AdminView();
-			image=admin.getImageAuthor(author.getImage());
 
 			this.listBooks = admin.getAuthorBookList(idAuthor);
 			break;
 		case "editor_page":
 			this.editorPage = new EditorPageView();
-			image=editorPage.getImageAuthor(author.getImage());
 
 			this.listBooks = editorPage.getAuthorBookList(idAuthor);
 			break;
 		case "editor_text":
 			this.editorText = new EditorTextView();
-			image=editorText.getImageAuthor(author.getImage());
 
 			this.listBooks = editorText.getAuthorBookList(idAuthor);
 			break;
 
 		}
 		size = this.listBooks.size();
-
+		image=getImage.getImageAuthor(author.getImage());
 		this.grid = new JPanel(new GridLayout(size+1, 1, 10, 10));
 		this.grid.add(new JLabel(author.getName().toUpperCase(),SwingConstants.CENTER));
 		this.grid.add(new JLabel (image));
@@ -191,7 +189,6 @@ public class ListBooks {
 		switch (this.user) {
 		case "admin_user":
 			this.admin = new AdminView();
-			img = this.admin.getImage(n.getImage());
 			if (content != null) {
 				author.add(new JLabel("autore: " + n.getAuthor().getName(),
 						SwingConstants.CENTER));
@@ -201,7 +198,6 @@ public class ListBooks {
 			break;
 		case "expert_user":
 			this.expert = new ExpertView();
-			img = this.expert.getImage(n.getImage());
 			if (content != null) {
 				author.add(new JLabel("autore: " + n.getAuthor().getName(),
 						SwingConstants.CENTER));
@@ -212,7 +208,6 @@ public class ListBooks {
 			break;
 		case "editor_page":
 			this.editorPage=new EditorPageView();
-			img = this.editorPage.getImage(n.getImage());
 			if (content != null) {
 				author.add(new JLabel("autore: " + n.getAuthor().getName(),
 						SwingConstants.CENTER));
@@ -222,7 +217,6 @@ public class ListBooks {
 			break;
 		case "editor_text":
 			this.editorText=new EditorTextView();
-			img = this.editorText.getImage(n.getImage());
 			if (content != null) {
 				author.add(new JLabel("autore: " + n.getAuthor().getName(),
 						SwingConstants.CENTER));
@@ -231,12 +225,11 @@ public class ListBooks {
 			}
 			break;
 		case "basic_user":
-			img = this.basic_user.getImage(n.getImage());
 			openbutpan.setVisible(false);
 			break;
 
 		}
-
+		img = getImage.getImageList(n.getImage());
 		label.setIcon(img);
 
 		grid.add(label);

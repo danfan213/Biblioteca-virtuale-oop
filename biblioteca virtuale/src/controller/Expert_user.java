@@ -10,10 +10,10 @@ import model.Book_model;
 import model.PageBook_model;
 import model.User_model;
 import view.ExpertView;
-import datalayer.AuthorMysqlImpl;
-import datalayer.BookMysqlImpl;
-import datalayer.PageBookMysqlImpl;
-import datalayer.TranscriptMysqlImpl;
+import datalayer.dbms.AuthorMysqlImpl;
+import datalayer.dbms.BookMysqlImpl;
+import datalayer.dbms.PageBookMysqlImpl;
+import datalayer.dbms.TranscriptMysqlImpl;
 
 public class Expert_user extends Logged_user{
 	 public Expert_user(User_model user) {
@@ -41,20 +41,15 @@ public class Expert_user extends Logged_user{
 	@Override //override del metodo astratto ritorna le pagine confermate senza trascrizione
 	public List<PageBook_model> listPages() {
 		List <PageBook_model> list=new ArrayList<>();
-		this.modelPageBook=new PageBookMysqlImpl();
-		
-		list=this.modelPageBook.selectPagesNoTran(false);
+		list=this.database.listPages();
 		return list;
 	}
 	
 	
 	//ritorna la lista di tutti i libri
 	public List<Book_model> searchBook() {
-		List<Book_model>list=new ArrayList<>();
-		this.modelBook=new BookMysqlImpl();
-		String stm="1";
-		
-		list=this.modelBook.selectAll(stm, false);
+		List<Book_model> list = new ArrayList<>();
+		list = this.database.searchBook();
 		return list;
 		
 	}
@@ -69,8 +64,7 @@ public class Expert_user extends Logged_user{
 		List<String> fields=new ArrayList<>();
 		fields.add("id_book");
 		fields.add("name");
-		this.modelBook=new BookMysqlImpl();
-		list=this.modelBook.selectField(fields,"1");
+		list=this.database.listNameBook(fields);
 		return list;
 	}
 
@@ -83,9 +77,7 @@ public class Expert_user extends Logged_user{
 		List<Book_model> list=new ArrayList<>();
 		List<String> fields=new ArrayList<>();
 		fields.add("num_total_page");
-		
-		this.modelBook=new BookMysqlImpl();
-		list=this.modelBook.selectField(fields,"id_book="+idBook);
+		list=this.database.totalPageBook(idBook, fields);
 		return list;
 	}
 
@@ -98,9 +90,7 @@ public class Expert_user extends Logged_user{
 		List<PageBook_model> list=new ArrayList<>();
 		List<String> fields=new ArrayList<>();
 		fields.add("id_pagebook");
-		
-		this.modelPageBook=new PageBookMysqlImpl();
-		list=this.modelPageBook.selectField(fields,"book_id="+idBook+" AND num_pag="+numPag+" AND is_confirmed='yes'");
+		list=this.database.checkExistingPage(numPag, idBook, fields);
 		return list;
 	}
 
@@ -110,13 +100,8 @@ public class Expert_user extends Logged_user{
 
 
 	public boolean insertNewPage(Integer idBook, File image, int numPag,User_model user) {
-boolean ris;
-		
-		String set="image,book_id,num_pag,is_confirmed,user_id";
-		String stm=idBook+","+numPag+",'wait',"+user.getId_User_model();
-		this.modelPageBook=new PageBookMysqlImpl();
-		ris=this.modelPageBook.insert(set, stm,image);
-		
+		boolean ris;
+		ris=this.database.insertNewPage(idBook, image, numPag, user);
 		return ris;
 	}
 
@@ -126,13 +111,8 @@ boolean ris;
 
 
 	public Book_model getBook(int idBook) {
-		this.modelBook=new BookMysqlImpl();
-		List<Book_model> list=new ArrayList<>();
 		Book_model book=new Book_model(null, 0, 0, null, null, null);
-		list=this.modelBook.selectAll("id_book="+idBook, false);
-		for(Book_model element :list){
-			book=element;
-		}
+		book=this.database.getBook(idBook);
 		return book;
 	}
 
@@ -143,10 +123,7 @@ boolean ris;
 
 	public boolean InsertNewTranscript(int id_User_model, int id_pagebook,
 			String TEI, String string) {
-		this.modelTranscript=new TranscriptMysqlImpl();
-		String set="TEI,pagebook_id,user_id,is_confirmed";
-		String stm="'"+TEI+"',"+id_pagebook+","+id_User_model+",'"+string+"'";
-		Boolean ris=this.modelTranscript.insert(set, stm);
+		Boolean ris=this.database.InsertNewTranscript(id_User_model, id_pagebook, TEI, string);
 		return ris;
 	}
 
@@ -156,10 +133,8 @@ boolean ris;
 
 
 	public List<Author_model> getAuthorBooks(int idAuthor) {
-		List<Author_model> list=new ArrayList<>();
-		
-		this.modelAuthor=new AuthorMysqlImpl();
-		list=this.modelAuthor.selectAll("id_author="+idAuthor, false);
+		List<Author_model> list = new ArrayList<>();
+		list = this.database.getAuthorBooks(idAuthor);
 		return list;
 	}
 

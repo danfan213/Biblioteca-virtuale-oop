@@ -17,13 +17,12 @@ import model.PageBook_model;
 import controller.Basic_user;
 
 public class BasicView {
-	JFrame home;
 	Basic_user controllerBasic;
-
 	public void InitializeView() {
 		HomeBasic window = new HomeBasic();
+	
 		try {
-			this.home = window.getHome();
+			 window.getHome();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

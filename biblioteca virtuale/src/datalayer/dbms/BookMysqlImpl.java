@@ -1,4 +1,4 @@
-package datalayer;
+package datalayer.dbms;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,9 +16,14 @@ import model.PageBook_model;
 
 import org.apache.commons.lang3.StringUtils;
 
+import utility.GetImage;
+
 import com.mysql.jdbc.Blob;
 
 public class BookMysqlImpl implements Entity_manager<Book_model> {
+	
+	private GetImage getImage=new GetImage();
+
 
 	@Override
 	public Book_model setModel_selectField(String element, Book_model temp,
@@ -38,7 +43,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 				temp.setNum_total_page(rs.getInt("num_total_page"));
 				break;
 			case "image":
-				temp.setImage((Blob) rs.getBlob("image"));
+				temp.setImage(getImage.getImageIcon(rs.getBlob("image")));
 				break;
 			}
 		} catch (SQLException e) {
@@ -61,14 +66,13 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("SELECT * FROM book WHERE "
-					+ stm);
+			statement = connection.prepareStatement(stm);
 			rs = statement.executeQuery();
 			if (rs != null) {
 				while (rs.next()) {
 					temp = new Book_model(null, 0, 0, null, null, null);
 					if (call == false) {
-						String exstm = "id_author=" + rs.getInt("author_id");
+						String exstm = "SELECT * from author WHERE id_author=" + rs.getInt("author_id");
 						listAuthors = authorsql.selectAll(exstm, true);
 						for (Author_model element : listAuthors) {
 							author = new Author_model(0, null, null);
@@ -77,10 +81,10 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 						temp.setAuthor(author);
 					}
 					List<PageBook_model> listpages = new ArrayList<PageBook_model>();
-					String exstm = "book_id=" + rs.getInt("id_book")+" ORDER BY num_pag ASC";
+					String exstm = "SELECT * FROM pagebook WHERE book_id=" + rs.getInt("id_book")+" ORDER BY num_pag ASC";
 					listpages = Pagebooksql.selectAll(exstm, true);
 					temp.setPagebook(listpages);
-					temp.setImage(rs.getBlob("image"));
+					temp.setImage(getImage.getImageIcon(rs.getBlob("image")));
 					temp.setId_book(rs.getInt("id_book"));
 					temp.setName(rs.getString("name"));
 					temp.setNum_total_page(rs.getInt("num_total_page"));
@@ -108,8 +112,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		Connection connection = con.connessione();
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("SELECT " + query
-					+ " FROM book WHERE " + stm);
+			statement = connection.prepareStatement(stm);
 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
@@ -131,7 +134,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		return listBooks;
 	}
 
-	public Boolean update(String set, String stm, File image) {
+	public Boolean update( String stm, File image) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
@@ -139,13 +142,11 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		try {
 			if (image != null) {
 				FileInputStream fis = new FileInputStream(image);
-				statement = connection.prepareStatement("update book set"
-						+ " image=?," + set + " where " + stm);
+				statement = connection.prepareStatement(stm);
 
 				statement.setBinaryStream(1, fis, (int) image.length());
 			} else {
-				statement = connection.prepareStatement("update book set "
-						+ set + " where " + stm);
+				statement = connection.prepareStatement(stm);
 			}
 			statement.executeUpdate();
 			con.disconnetti(connection, statement, rs);
@@ -167,8 +168,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("delete from book where "
-					+ stm);
+			statement = connection.prepareStatement(stm);
 
 			statement.execute();
 
@@ -181,7 +181,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		}
 	}
 
-	public Boolean insert(String set, String stm, File image) {
+	public Boolean insert(String stm, File image) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
@@ -190,8 +190,7 @@ public class BookMysqlImpl implements Entity_manager<Book_model> {
 		try {
 			fis = new FileInputStream(image);
 
-			statement = connection.prepareStatement("insert into book (" + set
-					+ ") values (?," + stm + ")");
+			statement = connection.prepareStatement(stm);
 			statement.setBinaryStream(1, fis, (int) image.length());
 			statement.execute();
 

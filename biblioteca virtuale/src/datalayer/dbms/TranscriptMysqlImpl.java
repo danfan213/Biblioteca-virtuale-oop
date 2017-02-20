@@ -1,4 +1,4 @@
-package datalayer;
+package datalayer.dbms;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,8 +44,7 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("SELECT " + query
-					+ " FROM transcript WHERE " + stm);
+			statement = connection.prepareStatement(stm);
 			rs = statement.executeQuery();
 			while (rs.next()) {
 				temp = new Transcript_model(0, null, null, null);
@@ -74,7 +73,7 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 		try {
 
 			PreparedStatement statement = connection
-					.prepareStatement("delete from transcript where " + stm);
+					.prepareStatement(stm);
 			statement.execute();
 
 			con.disconnetti(connection, statement, rs);
@@ -99,7 +98,7 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 		PreparedStatement statement;
 		try {
 			statement = connection
-					.prepareStatement("SELECT * FROM transcript WHERE " + stm);
+					.prepareStatement(stm);
 			
 			rs = statement.executeQuery();
 			if (rs != null) {
@@ -109,7 +108,7 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 					if (call == false) {
 						List<User_model> listUsers = new ArrayList<User_model>();
 
-						String exstm = "id_user=" + rs.getInt("user_id");
+						String exstm = "SELECT * FROM user WHERE id_user=" + rs.getInt("user_id");
 						listUsers = usersql.selectAll(exstm, true);
 						for (User_model element : listUsers) {
 							page = new User_model(0, null, null, null, null);
@@ -135,14 +134,13 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 		return listPages;
 	}
 
-	public Boolean insert(String set, String stm) {
+	public Boolean insert(String stm) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("insert into transcript ("
-					+ set + ") values (" + stm + ")");
+			statement = connection.prepareStatement(stm);
 			statement.executeUpdate();
 
 			con.disconnetti(connection, statement, rs);
@@ -153,14 +151,13 @@ public class TranscriptMysqlImpl implements Entity_manager<Transcript_model> {
 		}
 	}
 
-	public Boolean update(String set, String stm) {
+	public Boolean update(String stm) {
 		Connect con = new Connect();
 		Connection connection = con.connessione();
 		ResultSet rs = null;
 		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement("update transcript set"
-					+ set + "where " + stm);
+			statement = connection.prepareStatement(stm);
 			statement.executeUpdate();
 			con.disconnetti(connection, statement, rs);
 
